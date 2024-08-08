@@ -29,8 +29,10 @@ public class FirstTest {
 
     @Test
     public void test(){
-        driver.findElement(AppiumBy.accessibilityId("Buttons")).click();
-    }
+    System.out.println("Starting the test...");
+    driver.findElement(AppiumBy.accessibilityId("Buttons")).click();
+    System.out.println("Clicked the Buttons element.");
+}
 
     @AfterTest
     public void close(){

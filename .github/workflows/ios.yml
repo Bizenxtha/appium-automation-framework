@@ -1,4 +1,4 @@
-name: iOS Appium Tests
+name: iOS Test on macOS Runner
 
 on:
   push:
@@ -9,49 +9,31 @@ on:
       - main
 
 jobs:
-  build:
+  ios-test:
     runs-on: macos-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 19
-        uses: actions/setup-java@v2
-        with:
-          java-version: '19'
-          distribution: 'temurin'
+    - name: Set up JDK 15
+      uses: actions/setup-java@v3
+      with:
+        java-version: '15'
+        distribution: 'adopt'
 
-      - name: Install general dependencies
-        run: |
-          brew install node
-          sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
-          sudo xcodebuild -license accept
-          gem install xcpretty
+    - name: Install dependencies
+      run: mvn install
 
-      - name: Install Appium
-        run: npm install -g appium
-        # Install Appium globally
+    - name: Start Appium Server
+      run: appium &
 
-      - name: Verify Appium Installation
-        run: appium --version
-        # Confirm that Appium was installed successfully
+    - name: Boot iOS Simulator
+      run: |
+        xcrun simctl boot "iPhone SE (2nd generation)"
+        xcrun simctl install booted apps/UIKitCatalog.app
 
-      - name: Install Appium xcuitest driver
-        run: sudo appium driver install xcuitest
-        # Install the iOS driver
+    - name: Run iOS tests
+      run: mvn test
 
-      - name: Verify xcuitest driver installation
-        run: appium driver list --installed
-        # List installed drivers to confirm xcuitest is installed
-
-      - name: List available simulators
-        run: xcrun simctl list devices
-        # List all available simulators
-
-      - name: Start Appium server
-        run: appium --log-level debug &
-        continue-on-error: true
-
-      - name: Run Appium tests
-        run: mvn clean test
+    - name: Shutdown Simulator
+      run: xcrun simctl shutdown all

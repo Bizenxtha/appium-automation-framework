@@ -27,14 +27,20 @@ jobs:
 
     - name: Start Appium Server
       run: |
-        nohup appium --use-plugins uiautomator2 --use-plugins xcuitest &
+        nohup appium --use-plugins xcuitest &
         sleep 20 # Allow some time for Appium to start
+
+    - name: Wait for Appium Server
+      run: |
+        until curl -s http://localhost:4723/wd/hub/status | grep '"status": 0'; do
+          echo "Waiting for Appium server..."
+          sleep 5
+        done
 
     - name: Install and Configure iOS Simulator
       run: |
         xcrun simctl boot "iPhone SE (2nd generation)"
         xcrun simctl install booted apps/UIKitCatalog.app
-        xcrun simctl shutdown "iPhone SE (2nd generation)"
 
     - name: Run iOS UI tests
       env:

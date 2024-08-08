@@ -22,8 +22,14 @@ jobs:
       run: npm install -g appium-xcuitest-driver
 
     - name: Boot iOS Simulator
+      id: boot_simulator
       run: |
-        SIMULATOR_UDID=$(xcrun simctl list devices | grep 'iPhone 15 Pro' | grep 'Shutdown' | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
+        # Find UDID of the iPhone 15 Pro simulator
+        SIMULATOR_UDID=$(xcrun simctl list devices | grep 'iPhone 15 Pro' | grep 'Shutdown' | head -n 1 | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
+        if [ -z "$SIMULATOR_UDID" ]; then
+          echo "No available simulator found."
+          exit 1
+        fi
         echo "Booting simulator with UDID: $SIMULATOR_UDID"
         xcrun simctl boot $SIMULATOR_UDID
         # Wait for the simulator to boot
@@ -37,10 +43,13 @@ jobs:
     - name: Run Tests
       run: |
         # Replace with your test command
-        maven clean test
+        npm test
 
     - name: Cleanup
       if: always()
       run: |
-        # Shut down the simulator
-        xcrun simctl shutdown $SIMULATOR_UDID
+        # Shutdown the simulator
+        SIMULATOR_UDID=$(xcrun simctl list devices | grep 'iPhone 15 Pro' | grep 'Shutdown' | head -n 1 | awk -F'(' '{print $2}' | awk -F')' '{print $1}')
+        if [ ! -z "$SIMULATOR_UDID" ]; then
+          xcrun simctl shutdown $SIMULATOR_UDID
+        fi

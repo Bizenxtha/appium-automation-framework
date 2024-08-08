@@ -20,10 +20,10 @@ jobs:
         distribution: 'adopt'
 
     - name: Install Appium
-      run: npm install -g appium
+      run: sudo npm install -g appium
 
     - name: Install or Update XCUItest Driver
-      run: appium driver install xcuitest
+      run: sudo appium driver install xcuitest
 
     - name: Start Appium Server
       run: |
@@ -39,7 +39,7 @@ jobs:
 
     - name: Install and Configure iOS Simulator
       run: |
-        xcrun simctl boot "iPhone SE (2nd generation)"
+        xcrun simctl boot "iPhone 15 Pro (2nd generation)"
         xcrun simctl install booted apps/UIKitCatalog.app
 
     - name: Run iOS UI tests

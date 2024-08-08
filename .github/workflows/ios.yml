@@ -29,14 +29,21 @@ jobs:
           sudo xcodebuild -license accept
           gem install xcpretty
 
-      - name: Install Appium and drivers
-        run: |
-          npm install -g appium
-          npm install -g appium-xcuitest-driver # Install the iOS driver
+      - name: Install Appium
+        run: npm install -g appium
+        # Install Appium globally
+
+      - name: Verify Appium Installation
+        run: appium --version
+        # Confirm that Appium was installed successfully
+
+      - name: Install Appium xcuitest driver
+        run: sudo appium driver install xcuitest
+        # Install the iOS driver
 
       - name: Verify xcuitest driver installation
         run: appium driver list --installed
-        # This command will list all installed drivers, including xcuitest
+        # List installed drivers to confirm xcuitest is installed
 
       - name: Start Appium server
         run: appium --log-level debug &

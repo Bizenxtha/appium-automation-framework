@@ -16,7 +16,7 @@ public class FirstTest {
 
     @BeforeTest
     public void setup() throws MalformedURLException {
-        String appiumServerUrl = "http://192.168.1.94:4723";
+        String appiumServerUrl = "http://192.168.64.11:4723/";
 
         DesiredCapabilities dc = new DesiredCapabilities();
         dc.setCapability("platformName","IOS");

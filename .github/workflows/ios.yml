@@ -49,7 +49,7 @@ jobs:
       - name: Start specific simulator
         run: |
           xcrun simctl boot "iPhone 15 Pro" # Replace with your simulator name or UDID
-          sleep 15 # Wait for the simulator to boot
+          sleep 60 # Increase sleep time if necessary
 
       - name: Start Appium server
         run: |

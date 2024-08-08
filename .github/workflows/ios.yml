@@ -31,23 +31,30 @@ jobs:
 
       - name: Install Appium
         run: npm install -g appium
-        # Install Appium globally
 
       - name: Verify Appium Installation
         run: appium --version
-        # Confirm that Appium was installed successfully
 
       - name: Install Appium xcuitest driver
         run: sudo appium driver install xcuitest
-        # Install the iOS driver
 
       - name: Verify xcuitest driver installation
         run: appium driver list --installed
-        # List installed drivers to confirm xcuitest is installed
+
+      - name: Stop all simulators
+        run: |
+          xcrun simctl shutdown all
+          xcrun simctl erase all
+
+      - name: Start specific simulator
+        run: |
+          xcrun simctl boot "iPhone 15 Pro" # Replace with your simulator name or UDID
+          sleep 15 # Wait for the simulator to boot
 
       - name: Start Appium server
-        run: appium --log-level debug &
-        continue-on-error: true
+        run: |
+          appium --log-level debug &
+          sleep 15 # Wait for Appium server to start
 
       - name: Run Appium tests
         run: mvn clean test

@@ -34,6 +34,10 @@ jobs:
           npm install -g appium
           npm install -g appium-xcuitest-driver # Install the iOS driver
 
+      - name: Verify xcuitest driver installation
+        run: appium driver list --installed
+        # This command will list all installed drivers, including xcuitest
+
       - name: Start Appium server
         run: appium --log-level debug &
         continue-on-error: true

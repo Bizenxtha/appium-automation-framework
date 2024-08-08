@@ -27,8 +27,11 @@ jobs:
 
     - name: Start Appium Server
       run: |
-        nohup appium --use-plugins xcuitest &
+        sudo appium --use-plugins xcuitest > appium.log 2>&1 &
+        echo "Waiting for Appium server to start..."
         sleep 20 # Allow some time for Appium to start
+        tail -n 10 appium.log
+
 
     - name: Wait for Appium Server
       run: |

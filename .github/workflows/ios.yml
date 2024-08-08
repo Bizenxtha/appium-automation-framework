@@ -22,13 +22,11 @@ jobs:
           distribution: 'temurin'
           java-version: '19'
 
-      - name: Install Maven and Node.js
-        run: |
-          brew install maven
-          brew install node
-
       - name: Install Appium
         run: npm install -g appium
+
+      - name: Install XCUITest driver
+        run: appium driver install xcuitest
 
       - name: List available simulators
         run: xcrun simctl list devices

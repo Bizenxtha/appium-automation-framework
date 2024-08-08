@@ -22,14 +22,17 @@ jobs:
           java-version: '19'
           distribution: 'temurin'
 
-      - name: Install dependencies
+      - name: Install general dependencies
         run: |
           brew install node
-          npm install -g appium
-          npm install -g appium-xcuitest-driver # Install the iOS driver
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           sudo xcodebuild -license accept
           gem install xcpretty
+
+      - name: Install Appium and drivers
+        run: |
+          npm install -g appium
+          npm install -g appium-xcuitest-driver # Install the iOS driver
 
       - name: Start Appium server
         run: appium --log-level debug &

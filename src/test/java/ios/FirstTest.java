@@ -16,16 +16,17 @@ public class FirstTest {
 
     @BeforeTest
     public void setup() throws MalformedURLException {
-        String appiumServerUrl = "http://192.168.1.94:4723/";
-
+        String appiumServerUrl = System.getenv("APPIUM_SERVER_URL");
+    
         DesiredCapabilities dc = new DesiredCapabilities();
-        dc.setCapability("platformName","IOS");
-        dc.setCapability("appium:automationName","XCUITest");
-        dc.setCapability("appium:app",System.getProperty("user.dir")+ "/apps/UIKitCatalog.app");
-        dc.setCapability("appium:deviceName","iPhone 15 Pro");
-
-        driver = new IOSDriver(new URL(appiumServerUrl),dc);
+        dc.setCapability("platformName", "iOS");
+        dc.setCapability("appium:automationName", "XCUITest");
+        dc.setCapability("appium:app", System.getProperty("user.dir") + "/apps/UIKitCatalog.app");
+        dc.setCapability("appium:deviceName", "iPhone SE (2nd generation)");
+    
+        driver = new IOSDriver(new URL(appiumServerUrl), dc);
     }
+
 
     @Test
     public void test(){

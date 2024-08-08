@@ -46,10 +46,21 @@ jobs:
           xcrun simctl shutdown all
           xcrun simctl erase all
 
-      - name: Start specific simulator
+      - name: Start and wait for simulator
         run: |
-          xcrun simctl boot "iPhone 15 Pro" # Replace with your simulator name or UDID
-          sleep 60 # Increase sleep time if necessary
+          simulator_name="iPhone 15 Pro" # Replace with your simulator name or UDID
+          xcrun simctl boot "$simulator_name"
+          echo "Waiting for simulator to boot..."
+          # Loop to wait for the simulator to boot
+          for i in {1..30}; do
+            boot_status=$(xcrun simctl bootstatus "$simulator_name" | grep -o 'Booted')
+            if [[ "$boot_status" == "Booted" ]]; then
+              echo "Simulator booted successfully."
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 15
+          done
 
       - name: Start Appium server
         run: |

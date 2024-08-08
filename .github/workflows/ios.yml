@@ -49,41 +49,6 @@ jobs:
         run: xcrun simctl list devices
         # List all available simulators
 
-      - name: Start and wait for simulator
-        run: |
-          simulator_name="iPhone 15 Pro" # Ensure this matches the name or UDID from the list
-
-          # Start the simulator
-          echo "Starting simulator: $simulator_name"
-          xcrun simctl boot "$simulator_name"
-
-          echo "Waiting for simulator to boot..."
-          # Loop to wait for the simulator to boot
-          for i in {1..30}; do
-            boot_status=$(xcrun simctl bootstatus "$simulator_name" 2>&1)
-            
-            if echo "$boot_status" | grep -q 'Booted'; then
-              echo "Simulator booted successfully."
-              break
-            elif echo "$boot_status" | grep -q 'shutdown'; then
-              echo "Simulator is shutting down, trying to boot again."
-              xcrun simctl boot "$simulator_name"
-            else
-              echo "Boot status: $boot_status"
-            fi
-
-            echo "Waiting... ($i/30)"
-            sleep 15
-          done
-          
-          if [[ "$boot_status" != *"Booted"* ]]; then
-            echo "Simulator did not boot successfully."
-            exit 1
-          fi
-        shell: /bin/bash -e {0}
-        env:
-          JAVA_HOME: /Users/runner/hostedtoolcache/Java_Temurin-Hotspot_jdk/19.0.2-7/x64/Contents/Home
-
       - name: Start Appium server
         run: appium --log-level debug &
         continue-on-error: true

@@ -27,13 +27,7 @@ jobs:
     - name: Start Appium Server
       run: appium &
 
-    - name: Boot iOS Simulator
-      run: |
-        xcrun simctl boot "iPhone SE (2nd generation)"
-        xcrun simctl install booted apps/UIKitCatalog.app
-
     - name: Run iOS tests
+      env:
+        APPIUM_SERVER_URL: ${{ secrets.APPIUM_SERVER_URL }}
       run: mvn test
-
-    - name: Shutdown Simulator
-      run: xcrun simctl shutdown all

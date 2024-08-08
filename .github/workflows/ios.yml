@@ -20,18 +20,19 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '19'
-          distribution: 'temurin'  # Use 'temurin' for the Eclipse Temurin JDK distribution
+          distribution: 'temurin'
 
       - name: Install dependencies
         run: |
           brew install node
           npm install -g appium
+          npm install -g appium-xcuitest-driver # Install the iOS driver
           sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
           sudo xcodebuild -license accept
           gem install xcpretty
 
       - name: Start Appium server
-        run: appium &
+        run: appium --log-level debug &
         continue-on-error: true
 
       - name: Run Appium tests

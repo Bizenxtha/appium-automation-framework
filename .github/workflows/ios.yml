@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '19'
+          distribution: 'temurin'  # Use 'temurin' for the Eclipse Temurin JDK distribution
 
       - name: Install dependencies
         run: |

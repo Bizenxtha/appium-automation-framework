@@ -31,6 +31,12 @@ jobs:
       - name: List available simulators
         run: xcrun simctl list devices
 
+      - name: Boot iPhone 15 Pro simulator
+        run: xcrun simctl boot "iPhone 15 Pro"
+
+      - name: Wait for simulator to boot
+        run: xcrun simctl bootstatus "iPhone 15 Pro" --timeout 900
+
       - name: Start Appium server
         run: appium &
 
@@ -43,4 +49,3 @@ jobs:
         with:
           name: test-results
           path: target/surefire-reports/
-
